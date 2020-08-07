@@ -1,4 +1,8 @@
-FROM openjdk:8
+FROM python:3
+
 WORKDIR /usr/src/app
-COPY target/hello-world-webapp.jar /usr/src/app/
-CMD "java -jar /usr/src/app/hello-world-webapp.jar"
+
+COPY requirements.txt ./
+RUN pip3 install -r requirements.txt
+
+CMD [ "gunicorn", "app:app"  ]

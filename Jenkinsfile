@@ -22,13 +22,23 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(
-                        credentialsId: 'c01a453f-fe69-47d4-ad63-81dfaa273d7c',
+                        credentialsId: 'c01a453f-fe69-47d4-ad63-81dfaa273d8c',
                         toolName: 'docker') {
 
                         // Build and Push
                         def webAppImage = docker.build("vibhor987/hello-world-webapp:latest");
                         webAppImage.push();
                     }
+                }
+            }
+        }
+        stage('response') {
+            steps {
+                script {
+                    def response = httpRequest 'http://localhost:8080/jenkins/api/json?pretty=true'
+                    println("Status: "+response.status)
+                    println("Content: "+response.content)
+
                 }
             }
         }
